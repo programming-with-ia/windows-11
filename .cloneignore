@@ -1,0 +1,13 @@
+-> src/components/drag-window.tsx <--> ""
+-> src/components/TaskBar/search-icon.tsx <--> p:%Template%\src\components\stub-component.tsx <--> r:React.Fragment->svg
+-> src/styles/fluent.css <--> ""
+-> src/components/component.tsx <--> p:%Template%\src\components\stub-component.tsx <--> a:export { Comp as Component }
+-> src/lib/withDefaultProps.tsx <--> export const withDefaultProps = (...args: any) => args[0];
+
+src/app/command-gen
+src/app/radio-button
+src/app/demo
+src/app/test
+src/app/test-focus
+src/app/youtube
+help/

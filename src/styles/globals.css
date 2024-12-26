@@ -1,0 +1,279 @@
+@import "./fluent.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --primary: 200 100% 65%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --background: 0 0% 10%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    }
+}
+@layer base {
+    * {
+        @apply border-border;
+    }
+    *:first-child body {
+        /* font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC'; */
+        @apply bg-background text-foreground;
+    }
+    /* .font-segoe-icon {
+    @apply select-none cursor-default
+  } */
+    #screen {
+        background-position: center bottom;
+        @apply bg-cover bg-no-repeat;
+    }
+    #screen {
+        background-image: url("https://i.ibb.co/DVd7w5f/bg-light.jpg");
+    }
+    .dark #screen {
+        background-image: url("https://i.ibb.co/Jk7gMHT/bg-dark.jpg");
+    }
+    .acrylic-noise {
+        &::before {
+            content: "";
+            background-image: url("/noise.png");
+            @apply absolute inset-0 z-[-1] bg-repeat opacity-5;
+        }
+        @apply relative;
+    }
+}
+
+:host,
+html,
+body {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings:
+        "rlig" 1,
+        "calt" 1;
+}
+body {
+    /* font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC'; */
+}
+
+svg {
+    shape-rendering: geometricprecision;
+}
+
+svg circle,
+svg line,
+svg path,
+svg polygon,
+svg rect {
+    shape-rendering: geometricprecision;
+}
+
+[hidden] {
+    @apply hidden;
+}
+
+[data-win] {
+    &:focus-within {
+        @apply z-40;
+    }
+}
+
+[data-explorer-tab] {
+    --br: 0.75rem;
+    --bg: hsl(var(--foreground) / 0.05);
+
+    &::before,
+    &::after {
+        content: "";
+        background-image: radial-gradient(
+            circle at var(--gp, 0) 0,
+            transparent var(--br),
+            var(--bg) var(--br)
+        );
+        @apply absolute bottom-0 size-[var(--br)];
+    }
+    &::before {
+        --gp: 0;
+        @apply left-[calc(var(--br)*-1)];
+    }
+    &::after {
+        --gp: 100%;
+        @apply right-[calc(var(--br)*-1)];
+    }
+    @apply relative rounded-t-[var(--br)];
+}
+
+.container {
+    --uib-size: 40px;
+    --uib-color: hsl(var(--primary));
+    --uib-speed: 2s;
+    --uib-bg-opacity: 0;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    transform-origin: center;
+    animation: rotate var(--uib-speed) linear infinite;
+    will-change: transform;
+    overflow: visible;
+}
+
+.car {
+    fill: none;
+    stroke: var(--uib-color);
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    stroke-linecap: round;
+    animation: stretch calc(var(--uib-speed) * 0.75) ease-in-out infinite;
+    will-change: stroke-dasharray, stroke-dashoffset;
+    transition: stroke 0.5s ease;
+}
+
+.track {
+    fill: none;
+    stroke: var(--uib-color);
+    opacity: var(--uib-bg-opacity);
+    transition: stroke 0.5s ease;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes stretch {
+    0% {
+        stroke-dasharray: 0, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 75, 150;
+        stroke-dashoffset: -25;
+    }
+    100% {
+        stroke-dashoffset: -100;
+    }
+}
+
+.cursor-pointer *,
+button:not(.cursor-default),
+button:not(.cursor-default) * {
+    /* for start-menu footer buttons */
+    @apply !cursor-pointer;
+}
+
+img {
+    @apply select-none;
+}
+
+#shadcn-theme-editor {
+    @apply relative z-[150];
+}
+
+.customScrollBar {
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+}
+
+.customScrollBar::-webkit-scrollbar {
+    width: 0.4rem;
+    height: 0.4rem;
+}
+
+.customScrollBar::-webkit-scrollbar-track {
+    @apply bg-background;
+}
+
+.customScrollBar::-webkit-scrollbar-thumb {
+    @apply rounded-[2px] bg-foreground/40;
+}
+.customScrollBar::-webkit-scrollbar-thumb:hover {
+    @apply rounded-sm bg-foreground/50;
+}
+
+.blur-mask {
+    -webkit-mask: linear-gradient(transparent, #000 30%);
+    mask: linear-gradient(transparent, #000 30%);
+}
+.blur-mask-bottom {
+    -webkit-mask: linear-gradient(180deg, black 60%, transparent 80%);
+    mask: linear-gradient(180deg, black 60%, transparent 80%);
+}
+.win-minimize * {
+    /* remove it */
+    @apply !invisible !hidden;
+}
+
+.passwordScreen {
+    button,
+    span,
+    input {
+        @apply pointer-events-auto;
+    }
+}
+/* not password screen, not scrolling (via double-click etc), not dragging */
+.group\/lock:not(.active-passwordScreen):not(.lenis-scrolling):not(:active)
+    .passwordScreen {
+    button,
+    span,
+    input {
+        @apply invisible;
+    }
+}
+
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-clear-button,
+input::-webkit-inner-spin-button,
+input::-webkit-textfield-decoration-container {
+    display: none;
+}
