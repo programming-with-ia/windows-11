@@ -69,12 +69,12 @@ function ThisPcFolderItem(props: Omit<ThisPCItemProps, "childern">) {
 }
 
 const FoldersItems = [
-    { icon: "/icons/folder-desktop.ico", label: "Desktop" },
-    // { icon: "/icons/folder-documents.ico", label: "Documents" },
-    // { icon: "/icons/folder-downloads.ico", label: "Downloads" },
-    { icon: "/icons/folder-music.ico", label: "Music" },
-    { icon: "/icons/folder-pictures.ico", label: "Pictures" },
-    { icon: "/icons/folder-videos.ico", label: "Videos" },
+    { icon: "/icons/folder-desktop.png", label: "Desktop" },
+    // { icon: "/icons/folder-documents.png", label: "Documents" },
+    // { icon: "/icons/folder-downloads.png", label: "Downloads" },
+    { icon: "/icons/folder-music.png", label: "Music" },
+    { icon: "/icons/folder-pictures.png", label: "Pictures" },
+    { icon: "/icons/folder-videos.png", label: "Videos" },
 ];
 
 function ThisPC() {
@@ -103,19 +103,19 @@ function ThisPC() {
                         fill="58.7%"
                         space="408.1 GB free of 988 GB"
                         label="Local Disk (C:)"
-                        icon="/icons/windows-drive.ico"
+                        icon="/icons/windows-drive.png"
                     />
                     <ThisPcDriveItem
                         fill="73.7%"
                         space="498.8 GB free of 1895 GB"
                         label="Local Disk (D:)"
-                        icon="/icons/drive.ico"
+                        icon="/icons/drive.png"
                     />
                     <ThisPcDriveItem
                         fill="24.1%"
                         space="2816.7 GB free of 3712 GB"
                         label="Local Disk (E:)"
-                        icon="/icons/drive.ico"
+                        icon="/icons/drive.png"
                     />
                 </AccordionContent>
             </AccordionItem>

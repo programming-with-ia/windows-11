@@ -77,7 +77,7 @@ export function DesktopItemBase({
                     {isShortcut && (
                         <Image
                             className="absolute bottom-0 left-0 size-8"
-                            src="/icons/shortcut.ico"
+                            src="/icons/shortcut.png"
                             alt=""
                             width={32}
                             height={32}

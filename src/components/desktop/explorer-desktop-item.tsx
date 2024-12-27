@@ -7,7 +7,7 @@ import { doubleClick } from "@/lib/utils";
 function ExplorerDesktopItem({
     name,
     explorerTab,
-    icon = "/icons/folder.ico",
+    icon = "/icons/folder.png",
 }: {
     icon?: string;
     name: string;

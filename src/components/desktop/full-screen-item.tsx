@@ -53,8 +53,8 @@ function FullScreenBtn({
                 key={isFullScreen ? 1 : 0}
                 icon={
                     isFullScreen
-                        ? "/icons/exit-full-screen.ico"
-                        : "/icons/full-screen.ico"
+                        ? "/icons/exit-full-screen.png"
+                        : "/icons/full-screen.png"
                 }
                 name={isFullScreen ? "Exit Full Screen" : "Full Screen"}
                 isShortcut

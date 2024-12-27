@@ -127,7 +127,7 @@ function StartButton() {
                             Pinned <GroupHeaderButton label="All apps" />
                         </div>
                         <div className="flex flex-1 flex-wrap content-start justify-start">
-                            <PinnedItem img="/icons/folder.ico" title="Name" />
+                            <PinnedItem img="/icons/folder.png" title="Name" />
                             <PinnedItem
                                 img="/icons/projects.png"
                                 title="Projects"
@@ -183,12 +183,12 @@ function StartButton() {
                                 date="Recently added"
                             />
                             <RecommendItem
-                                img="/icons/folder.ico"
+                                img="/icons/folder.png"
                                 title="Github"
                                 date="1h ago"
                             />
                             <RecommendItem
-                                img="/icons/folder.ico"
+                                img="/icons/folder.png"
                                 title="Github"
                                 date="2h ago"
                             />

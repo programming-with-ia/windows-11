@@ -31,21 +31,21 @@ export function LargeItem({
         >
             <Component As={isShortcut ? "div" : 0} className="relative">
                 <img
-                    className="aspect-square object-contain"
+                    className="aspect-square object-contain w-24"
                     src={icon}
                     alt={label + " icon"}
                 />
                 {isShortcut && (
                     <img
                         className="absolute bottom-1 left-2 size-8"
-                        src="/icons/shortcut.ico"
+                        src="/icons/shortcut.png"
                         alt=""
                         width={32}
                         height={32}
                     />
                 )}
             </Component>
-            <span className="line-clamp-4">{label}</span>
+            <span className="line-clamp-4 mt-auto">{label}</span>
         </button>
     );
 }

@@ -5,7 +5,7 @@ import TaskBar from "@/components/TaskBar";
 import React, { useEffect } from "react";
 import Explorer from "@/components/desktop/explorer";
 import Iframe from "@/components/iframe";
-import YouTubeEmbed from "@/components/youtube";
+// import YouTubeEmbed from "@/components/youtube";
 import CalculatorItem from "@/components/lazy-items/calculator-item";
 import ExplorerDesktopItem from "@/components/desktop/explorer-desktop-item";
 import { Component } from "@/components/component";
@@ -61,7 +61,7 @@ function Page() {
                     <Explorer />
                     <CalculatorItem />
                     <DesktopItem
-                        icon="/icons/chrome.ico"
+                        icon="/icons/chrome.png"
                         name="Chrome"
                         className="gap-2"
                         isShortcut
@@ -81,7 +81,7 @@ function Page() {
                         }}
                     />
                     <DesktopItem
-                        icon="/icons/vscode.ico"
+                        icon="/icons/vscode.png"
                         name="VS Code"
                         isShortcut
                         smallIcon
@@ -93,16 +93,16 @@ function Page() {
                             id: "vs-code",
                         }}
                     />
-                    <DesktopItem
+                    {/* <DesktopItem
                         icon="/icons/youtube.ico"
                         name="Youtube"
                         isShortcut
                         smallIcon
                         className="gap-2"
                         win={{ child: <YouTubeEmbed />, id: "youtube" }}
-                    />
+                    /> */}
                     {/* <DesktopItem icon="/icons/game.ico" name="Game" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://g.poppigames.com/pp/purble-place/" />, id: "friv-game"}} /> */}
-                    {/* <DesktopItem icon="/icons/vscode.ico" name="Tic Tac Toe" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://www.onlinegames.io/games/2021/unity2/tic-tac-toe/index.html" />, id: "tic-tac-toe"}} /> */}
+                    {/* <DesktopItem icon="/icons/vscode.png" name="Tic Tac Toe" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://www.onlinegames.io/games/2021/unity2/tic-tac-toe/index.html" />, id: "tic-tac-toe"}} /> */}
                     <DesktopItem
                         icon="/icons/motoX3.jpg"
                         name="Moto X3M"

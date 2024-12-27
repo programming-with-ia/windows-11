@@ -21,7 +21,7 @@ function ExplorerItem() {
                 onDoubleClick={() => setIsWinShow(true)}
                 smallIcon
                 className="gap-1.5"
-                icon="/icons/explorer.ico"
+                icon="/icons/explorer.png"
                 name="File Explorer"
                 id="explorer-desktop-item"
                 {...(isWinShow
