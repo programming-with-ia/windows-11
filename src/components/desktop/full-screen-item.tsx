@@ -1,5 +1,6 @@
 "use client";
 import DesktopItem from "@/components/desktop/desktop-item";
+import { DesktopIcons } from "@/lib/images";
 import { cn } from "@/lib/utils";
 import type { CompoProps } from "@/types/types";
 import React, { useEffect, useState } from "react";
@@ -53,8 +54,8 @@ function FullScreenBtn({
                 key={isFullScreen ? 1 : 0}
                 icon={
                     isFullScreen
-                        ? "/icons/exit-full-screen.png"
-                        : "/icons/full-screen.png"
+                        ? DesktopIcons.ExitFullScreen
+                        : DesktopIcons.FullScreen
                 }
                 name={isFullScreen ? "Exit Full Screen" : "Full Screen"}
                 isShortcut

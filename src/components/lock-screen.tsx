@@ -33,6 +33,8 @@ import { isSignedIn } from "@/lib/emittors";
 import { routes } from "@/lib/routes-map";
 import Link from "next/link";
 import { loadingManager } from "@/lib/loading/loading-manager";
+import { prefetchImages } from "@/lib/preload-images";
+import { DesktopIcons } from "@/lib/images";
 
 const lockScreenStatus = {
     normal: "0",
@@ -201,6 +203,23 @@ function LockScreen() {
             // wrapper?.removeEventListener("wheel", handleWheel);
         };
     }, [isMount, debounceScrollToTop]);
+
+    useEffect(() => {
+        if (!isMount) return;
+
+        const intervalId = setInterval(() => {
+            console.log(document.readyState)
+            if (document.readyState === "complete") {
+                prefetchImages(Object.values(DesktopIcons));
+                clearInterval(intervalId);
+            }
+        }, 250);
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [isMount]);
+
     return (
         <ReactLenis
             options={{ easing: (t) => t, duration: 0.1 }}

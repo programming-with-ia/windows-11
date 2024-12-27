@@ -32,7 +32,7 @@ const TaskBarButton = React.forwardRef<HTMLButtonElement, TaskBarButtonProps>(
                 {...p}
             >
                 {src && (
-                    <Image
+                    <img
                         className={cn(
                             "transition-transform duration-200 animate-in fade-in-0 zoom-in-0 group-active:scale-[.8]",
                             imgClassName,

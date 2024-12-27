@@ -3,11 +3,12 @@ import { DesktopItemBase } from "./desktop-item";
 import { explorerTabEmittor } from "@/components/desktop/explorer/emittors";
 import type { explorerTabsType } from "@/components/desktop/explorer/explorer";
 import { doubleClick } from "@/lib/utils";
+import { DesktopIcons } from "@/lib/images";
 
 function ExplorerDesktopItem({
     name,
     explorerTab,
-    icon = "/icons/folder.png",
+    icon = DesktopIcons.Folder,
 }: {
     icon?: string;
     name: string;

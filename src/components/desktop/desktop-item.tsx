@@ -1,11 +1,12 @@
 "use client";
 import { clsx, cn } from "@/lib/utils";
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 import { type DraggableWindowProps } from "../drag-window";
 import dynamic from "next/dynamic";
 import { useWinState } from "@/hooks/useWinState";
 import { DesktopItemContextMenuEmittor } from "@/lib/emittors";
+import { DesktopIcons } from "@/lib/images";
 const DraggableWindowBase = dynamic(() =>
     import("../drag-window").then((all) => all.DraggableWindowBase),
 );
@@ -73,11 +74,11 @@ export function DesktopItemBase({
                         smallIcon ? "size-10" : "size-11",
                     )}
                 >
-                    <Image src={icon} alt={name} width={45} height={45} />
+                    <img src={icon} alt={name} width={45} height={45} />
                     {isShortcut && (
-                        <Image
+                        <img
                             className="absolute bottom-0 left-0 size-8"
-                            src="/icons/shortcut.png"
+                            src={DesktopIcons.Shortcut}
                             alt=""
                             width={32}
                             height={32}

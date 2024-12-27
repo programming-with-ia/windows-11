@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // import Explorer from './explorer';
 import dynamic from "next/dynamic";
 import { useWinState } from "@/hooks/useWinState";
+import { DesktopIcons } from "@/lib/images";
 const ExplorerWindow = dynamic(() =>
     import("./explorer").then((a) => a.ExplorerMain),
 );
@@ -21,7 +22,7 @@ function ExplorerItem() {
                 onDoubleClick={() => setIsWinShow(true)}
                 smallIcon
                 className="gap-1.5"
-                icon="/icons/explorer.png"
+                icon={DesktopIcons.Explorer}
                 name="File Explorer"
                 id="explorer-desktop-item"
                 {...(isWinShow

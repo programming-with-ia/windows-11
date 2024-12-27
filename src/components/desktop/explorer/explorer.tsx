@@ -6,7 +6,7 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { Slot } from "@radix-ui/react-slot";
 import clsx from "clsx";
@@ -20,35 +20,39 @@ import { explorerTabEmittor } from "./emittors";
 import SegoeIcon from "@/components/segoe-ui-icon";
 import { ExplorerItems } from "./_components/explorer-items";
 import { doubleClick } from "@/lib/utils";
+import { DesktopIcons, ExplorerIcons, GH_PublicTree } from "@/lib/images";
+import { prefetchImages } from "@/lib/preload-images";
 
-const skills = [
-    // use images from GitHub repo
-    { icon: "js.png", label: "JavaScript" },
-    { icon: "mongodb.png", label: "MongoDB" },
-    { icon: "mui.png", label: "Material UI" },
-    { icon: "mysql.png", label: "MySQL" },
-    { icon: "next.png", label: "Next.js" },
-    { icon: "node.png", label: "Node.js" },
-    { icon: "postgresql.png", label: "PostgreSQL" },
-    { icon: "prisma.png", label: "Prisma" },
-    { icon: "react.png", label: "React" },
-    { icon: "reactnative.png", label: "React Native" },
-    { icon: "reactquery.png", label: "React Query" },
-    { icon: "redux.png", label: "Redux" },
-    { icon: "stripe.png", label: "Stripe" },
-    { icon: "tailwind.png", label: "Tailwind CSS" },
-    { icon: "tauri.png", label: "Tauri" },
-    { icon: "ts.png", label: "TypeScript" },
-    { icon: "css.png", label: "CSS" },
-    { icon: "docker.png", label: "Docker" },
-    { icon: "express.png", label: "Express" },
-    { icon: "figma.png", label: "Figma" },
-    { icon: "firebase.png", label: "Firebase" },
-    { icon: "framer.png", label: "Framer Motion" },
-    { icon: "go.png", label: "Go" },
-    { icon: "graphql.png", label: "GraphQL" },
-    { icon: "html.png", label: "HTML" },
-];
+// use images from GitHub repo
+const skills = (
+    [
+        { icon: "/skills/js.png", label: "JavaScript" },
+        { icon: "/skills/mongodb.png", label: "MongoDB" },
+        { icon: "/skills/mui.png", label: "Material UI" },
+        { icon: "/skills/mysql.png", label: "MySQL" },
+        { icon: "/skills/next.png", label: "Next.js" },
+        { icon: "/skills/node.png", label: "Node.js" },
+        { icon: "/skills/postgresql.png", label: "PostgreSQL" },
+        { icon: "/skills/prisma.png", label: "Prisma" },
+        { icon: "/skills/react.png", label: "React" },
+        { icon: "/skills/reactnative.png", label: "React Native" },
+        { icon: "/skills/reactquery.png", label: "React Query" },
+        { icon: "/skills/redux.png", label: "Redux" },
+        { icon: "/skills/stripe.png", label: "Stripe" },
+        { icon: "/skills/tailwind.png", label: "Tailwind CSS" },
+        { icon: "/skills/tauri.png", label: "Tauri" },
+        { icon: "/skills/ts.png", label: "TypeScript" },
+        { icon: "/skills/css.png", label: "CSS" },
+        { icon: "/skills/docker.png", label: "Docker" },
+        { icon: "/skills/express.png", label: "Express" },
+        { icon: "/skills/figma.png", label: "Figma" },
+        { icon: "/skills/firebase.png", label: "Firebase" },
+        { icon: "/skills/framer.png", label: "Framer Motion" },
+        { icon: "/skills/go.png", label: "Go" },
+        { icon: "/skills/graphql.png", label: "GraphQL" },
+        { icon: "/skills/html.png", label: "HTML" },
+    ] as const
+).map((s) => ({ label: s.label, icon: `${GH_PublicTree}${s.icon}` }));
 
 const tabs: Array<
     {
@@ -70,13 +74,13 @@ const tabs: Array<
     {
         title: "This PC",
         id: "this-pc",
-        img: "/icons/pc.ico",
+        img: DesktopIcons.PC,
         tab: ThisPC,
     },
     {
         title: "About Me",
         id: "about-me",
-        img: "/icons/user-folder.png",
+        img: ExplorerIcons.UserFolder,
         tab: AboutTab,
     },
     {
@@ -121,7 +125,7 @@ function AboutTab() {
     return (
         <>
             <ExplorerItems.Large
-                icon="/icons/user-folder.png"
+                icon={ExplorerIcons.UserFolder}
                 label="Info"
                 onDoubleClick={() => explorerTabEmittor.emit("about-info")}
             />
@@ -141,7 +145,7 @@ function AboutTab() {
                 onDoubleClick={() =>
                     window.open("https://www.github.com", "_blank")
                 }
-                icon="/icons/github-icon.png"
+                icon={DesktopIcons.GithubIcon}
                 label="Github"
                 isShortcut
             />
@@ -166,12 +170,7 @@ function SkillsTab() {
                 <ExplorerItems.Large
                     className="gap-1"
                     label={skill.label}
-                    icon={
-                        skill.icon.startsWith("/") ||
-                        skill.icon.startsWith("http")
-                            ? skill.icon
-                            : `https://github.com/programming-with-ia/windows-11/raw/8298a01ffae8ad280ee74e18b20e841524be8845/public/skills/${skill.icon}`
-                    }
+                    icon={skill.icon}
                     key={idx}
                 />
             ))}
@@ -193,8 +192,8 @@ export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
                     data-explorer-tab
                     className="relative inline-flex min-w-60 items-center gap-2.5 bg-foreground/5 pl-2.5 text-xs"
                 >
-                    <Image
-                        src={"/icons/explorer.png"}
+                    <img
+                        src={DesktopIcons.Explorer}
                         className="size-4"
                         alt=""
                         width={16}
@@ -242,6 +241,10 @@ export function ExplorerMain() {
     );
     const CurrentTab = explorerTabMapped[CurrentTabKey ?? "about-me"];
 
+    useEffect(() => {
+        prefetchImages(skills.map((skill) => skill.icon));
+    }, []);
+
     return (
         <>
             <div className="pointer-events-none flex select-none justify-between border-b border-foreground/10 px-5 py-3">
@@ -284,7 +287,7 @@ export function ExplorerMain() {
                                     (typeof item.img == "string" ? (
                                         <span>
                                             {
-                                                <Image
+                                                <img
                                                     src={item.img}
                                                     alt={item.title}
                                                     width={16}

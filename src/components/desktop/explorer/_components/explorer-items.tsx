@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Component } from "@/components/component";
+import { DesktopIcons } from "@/lib/images";
 import { cn } from "@/lib/utils";
 import React from "react";
 type ExplorerItemProps = {
@@ -38,7 +39,7 @@ export function LargeItem({
                 {isShortcut && (
                     <img
                         className="absolute bottom-1 left-2 size-8"
-                        src="/icons/shortcut.png"
+                        src={DesktopIcons.Shortcut}
                         alt=""
                         width={32}
                         height={32}

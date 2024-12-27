@@ -35,6 +35,7 @@ import { doubleClick } from "@/lib/utils";
 import Construction from "@/icons/construction";
 import FullScreenBtn from "@/components/desktop/full-screen-item";
 import useIsSignedIn from "@/hooks/useIsSignedIn";
+import { DesktopIcons } from "@/lib/images";
 
 function Page() {
     //* need this
@@ -54,14 +55,14 @@ function Page() {
                     }}
                 >
                     <ExplorerDesktopItem
-                        icon="/icons/pc.ico"
+                        icon={DesktopIcons.PC}
                         name="This PC"
                         explorerTab="this-pc"
                     />
                     <Explorer />
                     <CalculatorItem />
                     <DesktopItem
-                        icon="/icons/chrome.png"
+                        icon={DesktopIcons.Chrome}
                         name="Chrome"
                         className="gap-2"
                         isShortcut
@@ -81,7 +82,7 @@ function Page() {
                         }}
                     />
                     <DesktopItem
-                        icon="/icons/vscode.png"
+                        icon={DesktopIcons.Vscode}
                         name="VS Code"
                         isShortcut
                         smallIcon
@@ -102,7 +103,7 @@ function Page() {
                         win={{ child: <YouTubeEmbed />, id: "youtube" }}
                     /> */}
                     {/* <DesktopItem icon="/icons/game.ico" name="Game" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://g.poppigames.com/pp/purble-place/" />, id: "friv-game"}} /> */}
-                    {/* <DesktopItem icon="/icons/vscode.png" name="Tic Tac Toe" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://www.onlinegames.io/games/2021/unity2/tic-tac-toe/index.html" />, id: "tic-tac-toe"}} /> */}
+                    {/* <DesktopItem icon={DesktopIcons.Vscode} name="Tic Tac Toe" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://www.onlinegames.io/games/2021/unity2/tic-tac-toe/index.html" />, id: "tic-tac-toe"}} /> */}
                     <DesktopItem
                         icon="/icons/motoX3.jpg"
                         name="Moto X3M"

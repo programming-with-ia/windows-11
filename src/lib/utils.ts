@@ -29,11 +29,5 @@ export function doubleClick(elementId: string) {
 export function focusElement(elementId: string) {
     document.getElementById(elementId)?.focus();
 }
-export const preloadImages = (imageUrls: string[]) => {
-    imageUrls.forEach((url) => {
-        const img = new Image();
-        img.src = url;
-    });
-};
 
 export { cx as clsx, twMerge };

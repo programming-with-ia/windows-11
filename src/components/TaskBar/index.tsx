@@ -9,6 +9,7 @@ import SegoeIcon from "../segoe-ui-icon";
 import { cn } from "@/lib/utils";
 import { Component } from "../component";
 import useOnlineStatus from "@/hooks/useOnline";
+import { DesktopIcons } from "@/lib/images";
 
 function TaskBar() {
     return (
@@ -127,7 +128,7 @@ function StartButton() {
                             Pinned <GroupHeaderButton label="All apps" />
                         </div>
                         <div className="flex flex-1 flex-wrap content-start justify-start">
-                            <PinnedItem img="/icons/folder.png" title="Name" />
+                            <PinnedItem img={DesktopIcons.Folder} title="Name" />
                             <PinnedItem
                                 img="/icons/projects.png"
                                 title="Projects"
@@ -183,12 +184,12 @@ function StartButton() {
                                 date="Recently added"
                             />
                             <RecommendItem
-                                img="/icons/folder.png"
+                                img={DesktopIcons.Folder}
                                 title="Github"
                                 date="1h ago"
                             />
                             <RecommendItem
-                                img="/icons/folder.png"
+                                img={DesktopIcons.Folder}
                                 title="Github"
                                 date="2h ago"
                             />
