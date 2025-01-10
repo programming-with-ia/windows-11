@@ -14,6 +14,7 @@ export const DesktopIcons = {
     Network: `${GH_PublicTree}/icons/network.png`,
     Shortcut: `${GH_PublicTree}/icons/shortcut.png`,
     Vscode: `${GH_PublicTree}/icons/vscode.png`,
+    Projects: `${GH_PublicTree}/icons/projects.png`,
 } as const satisfies Record<string, string>;
 
 export const ExplorerIcons = {

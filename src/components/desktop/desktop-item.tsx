@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useWinState } from "@/hooks/useWinState";
 import { DesktopItemContextMenuEmittor } from "@/lib/emittors";
 import { DesktopIcons } from "@/lib/images";
+// import { AnimatePresence } from "framer-motion";
 const DraggableWindowBase = dynamic(() =>
     import("../drag-window").then((all) => all.DraggableWindowBase),
 );
@@ -21,7 +22,12 @@ type DesktopItemProps = React.ComponentProps<"button"> & {
         child: React.ReactNode;
     } & Pick<
         DraggableWindowProps,
-        "image" | "wrapperClassName" | "className" | "id" | "resizeAbleProps"
+        | "image"
+        | "wrapperClassName"
+        | "className"
+        | "id"
+        | "resizeAbleProps"
+        | "style"
     >;
     titleBar?: DraggableWindowProps["titlebar"];
     taskBarItem?: DraggableWindowProps["taskBarItem"];
@@ -97,6 +103,7 @@ export function DesktopItemBase({
                     resizeAbleProps={win.resizeAbleProps}
                     onClose={onWinClose}
                     wrapperClassName={win.wrapperClassName}
+                    style={win.style}
                 >
                     {win.child}
                 </DraggableWindowBase>

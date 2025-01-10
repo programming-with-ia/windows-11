@@ -2,21 +2,24 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { loadingManager } from "./loading-manager";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useLoading from "./useLoading";
 
 export function LoadingLink({
-    className,
     children,
     onClick,
+    href,
     ...p
 }: React.ComponentPropsWithoutRef<typeof Link>) {
+    const router = useRouter()
     return (
         <Link
+            href={href}
             onClick={(e) => {
                 onClick?.(e);
                 loadingManager.setManualLoading(true);
             }}
+            onMouseEnter={e=>router.prefetch(e.currentTarget.href)}
             {...p}
         >
             {children}

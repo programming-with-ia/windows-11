@@ -22,6 +22,8 @@ const config = {
         "fixStyle": "inline-type-imports"
       }
     ],
+    "@typescript-eslint/prefer-nullish-coalescing": "warn",
+    "prefer-const": "warn",
     // "@typescript-eslint/no-unused-vars": [
     //   "warn",
     //   {

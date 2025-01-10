@@ -35,6 +35,7 @@ import Link from "next/link";
 import { loadingManager } from "@/lib/loading/loading-manager";
 import { prefetchImages } from "@/lib/preload-images";
 import { DesktopIcons } from "@/lib/images";
+import { setCookie } from 'cookies-next/client';
 
 const lockScreenStatus = {
     normal: "0",
@@ -102,7 +103,11 @@ function LockScreen() {
         console.log("redirect to home");
         isSignedIn.setState(true);
         loadingManager.setManualLoading(true);
-        router.push("/");
+        setCookie("authorized", true, {
+            maxAge: 120,
+        })
+        // router.push("/?authorized=true");
+        router.push("/"); //* routes.desktop
     };
 
     // Scroll Helpers
@@ -225,7 +230,7 @@ function LockScreen() {
             options={{ easing: (t) => t, duration: 0.1 }}
             root={false}
             ref={lenisRef}
-            className="group/lock fixed inset-0 z-50 select-none overflow-y-scroll bg-white dark:bg-black"
+            className="group/lock fixed inset-0 z-50 select-none scrollbar-hide overflow-y-scroll bg-white dark:bg-black"
             props={{
                 onPointerDown: handlePointerDown,
                 onPointerUp: handlePointerUp,
@@ -269,7 +274,7 @@ function LockScreen() {
                     scale: passwordLayerScale,
                 }}
                 tabIndex={-1}
-                className="passwordScreen sticky bottom-0 flex h-screen flex-col" // group-[:not(.pointer-events-none)]/lock:!pointer-events-none
+                className="passwordScreen acrylic-noise outline-none sticky bottom-0 flex h-screen flex-col" // group-[:not(.pointer-events-none)]/lock:!pointer-events-none
             >
                 <div className="flex flex-1 flex-col items-center justify-center gap-4 self-center justify-self-stretch">
                     <SegoeIcon

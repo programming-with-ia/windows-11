@@ -18,7 +18,7 @@ export function LargeItem({
     ...props
 }: ExplorerItemProps) {
     // const Comp = href ? Link : "button";
-    console.log("explorer item");
+    // console.log("explorer item");
     return (
         // <Comp
         <button

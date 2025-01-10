@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import {
     Accordion,
@@ -5,13 +6,21 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
+import { adjustArrayLength, cn, joinPath } from "@/lib/utils";
 // import Image from "next/image";
-import { ExplorerIcons } from "@/lib/images";
+import { DesktopIcons, ExplorerIcons } from "@/lib/images";
+import {
+    getDataByPath,
+    navigationData,
+} from "@/components/desktop/explorer/data";
+import { CommonPaths, explorerPathEmittor } from "@/components/desktop/explorer/emittors";
 type ThisPCItemProps = {
     icon: string;
     label?: string;
 } & React.ComponentProps<"button">;
+
+import zip from "lodash/zip";
+
 // & Omit<
 // React.ComponentProps<"button">,
 // "children"
@@ -47,10 +56,10 @@ function ThisPcDriveItem({
     label,
     fill,
     space,
-    ...props
+    ...p
 }: Omit<ThisPCItemProps, "childern"> & { fill: string; space: string }) {
     return (
-        <ThisPCItemBase {...props}>
+        <ThisPCItemBase {...p}>
             <div className="flex flex-1 flex-col text-start leading-5">
                 <span>{label}</span>
                 <span className="h-3.5 w-full bg-[#e6e6e6] p-[1px]">
@@ -79,6 +88,20 @@ const FoldersItems = [
 ];
 
 function ThisPC() {
+    const disksData = navigationData[CommonPaths.pc]?.folders ?? {};
+    const disksNames = Object.keys(disksData);
+    const dirvesCustomData = zip(
+        disksNames,
+        adjustArrayLength<[string, string]>(
+            [
+                ["408.1 GB free of 988 GB", "58.7%"],
+                ["498.8 GB free of 1895 GB", "73.7%"],
+                ["2816.7 GB free of 3712 GB", "24.1%"],
+            ],
+            disksNames.length,
+        ),
+    );
+    const userData = getDataByPath(CommonPaths.user);
     return (
         <Accordion
             type="multiple"
@@ -88,36 +111,50 @@ function ThisPC() {
             <AccordionItem value="item-1">
                 <AccordionTrigger>Folders</AccordionTrigger>
                 <AccordionContent className="flex flex-wrap gap-1">
-                    {FoldersItems.map((item, idx) => (
-                        <ThisPcFolderItem
-                            key={idx}
-                            label={item.label}
-                            icon={item.icon}
-                        />
-                    ))}
+                    {Object.keys(userData.folders ?? {})
+                        .slice(0, 4) // limit
+                        .map((folderName, idx) => (
+                            <ThisPcFolderItem
+                                key={idx}
+                                label={folderName}
+                                onDoubleClick={() =>
+                                    explorerPathEmittor.setState(
+                                        joinPath(CommonPaths.user, folderName),
+                                    )
+                                }
+                                icon={
+                                    userData.folders![folderName]?.icon ??
+                                    DesktopIcons.Folder
+                                }
+                            />
+                        ))}
                 </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
                 <AccordionTrigger>Devices and drives</AccordionTrigger>
                 <AccordionContent>
-                    <ThisPcDriveItem
-                        fill="58.7%"
-                        space="408.1 GB free of 988 GB"
-                        label="Local Disk (C:)"
-                        icon={ExplorerIcons.WindowsDrive}
-                    />
-                    <ThisPcDriveItem
-                        fill="73.7%"
-                        space="498.8 GB free of 1895 GB"
-                        label="Local Disk (D:)"
-                        icon={ExplorerIcons.Drive}
-                    />
-                    <ThisPcDriveItem
-                        fill="24.1%"
-                        space="2816.7 GB free of 3712 GB"
-                        label="Local Disk (E:)"
-                        icon={ExplorerIcons.Drive}
-                    />
+                    {dirvesCustomData
+                        .filter(Boolean)
+                        .map(([diskName, diskData], idx) => (
+                            <ThisPcDriveItem
+                                key={idx}
+                                fill={diskData?.[1] ?? ""}
+                                space={diskData?.[0] ?? ""}
+                                label={diskName ?? ""}
+                                onDoubleClick={() =>
+                                    explorerPathEmittor.setState(
+                                        joinPath(
+                                            CommonPaths.pc,
+                                            diskName ?? "",
+                                        ),
+                                    )
+                                }
+                                icon={
+                                    disksData[diskName ?? ""]?.icon ??
+                                    ExplorerIcons.Drive
+                                }
+                            />
+                        ))}
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

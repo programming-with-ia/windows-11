@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
 import { DesktopItemBase } from "./desktop-item";
-import { explorerTabEmittor } from "@/components/desktop/explorer/emittors";
+import { openExplorer } from "@/components/desktop/explorer/emittors";
 import type { explorerTabsType } from "@/components/desktop/explorer/explorer";
-import { doubleClick } from "@/lib/utils";
 import { DesktopIcons } from "@/lib/images";
 
 function ExplorerDesktopItem({
@@ -17,10 +15,7 @@ function ExplorerDesktopItem({
     return (
         <DesktopItemBase
             id={`${explorerTab}-explorer-desktop-item`}
-            onDoubleClick={() => {
-                explorerTabEmittor.setState(explorerTab);
-                doubleClick("explorer-desktop-item");
-            }}
+            onDoubleClick={() => openExplorer(explorerTab)}
             icon={icon}
             name={name}
         />

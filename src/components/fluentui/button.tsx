@@ -33,6 +33,28 @@ const buttonVariants = cva(
         },
     },
 );
+export const BadgeBtnVariants = cva(
+    "inline-flex cursor-default justify-between gap-1 rounded-md text-xs font-normal border border-foreground/5",
+    {
+        variants: {
+            variant: {
+                primary: "bg-primary hocus:bg-primary-hover",
+                secondary: "bg-foreground/10 hocus:bg-foreground/15",
+                secondaryLite: "bg-foreground/5 hocus:bg-foreground/10",
+                ghost: "hocus:bg-foreground/10",
+                ghostLite: "hocus:bg-foreground/5",
+            },
+            size: {
+                default: "px-2 py-1",
+                icon: "py-1 px-1.5",
+            },
+        },
+        defaultVariants: {
+            variant: "secondary",
+            size: "default",
+        },
+    },
+);
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,

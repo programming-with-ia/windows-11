@@ -4,11 +4,49 @@
  */
 await import("./src/env.js");
 
+const routes = {
+    desktop: "/",
+    lock: "/lock-screen",
+};
+
 /** @type {import("next").NextConfig} */
 const config = {
     typescript: {
         ignoreBuildErrors: true,
     },
+    async redirects() {
+        return [
+            {
+                source: routes.desktop,
+                destination: routes.lock,
+                permanent: false,
+                // missing: [
+                //     {
+                //         type: "query",
+                //         key: "authorized",
+                //         value: "true",
+                //     },
+                // ],
+                missing: [
+                    {
+                        type: "cookie",
+                        key: "authorized",
+                        value: "true",
+                    },
+                ],
+            },
+        ];
+    },
+    // images: {
+    //     remotePatterns: [
+    //         {
+    //             protocol: "https",
+    //             hostname: "github.com",
+    //             pathname: "/programming-with-ia/windows-11/**",
+    //             search: ""
+    //         }
+    //     ]
+    // }
 };
 
 export default config;

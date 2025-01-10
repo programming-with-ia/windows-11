@@ -5,13 +5,14 @@
 
 @layer base {
     :root {
+        --primary: 208 100% 38%;
+        --primary-hover: 215 100% 29%;
         --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
         --card: 0 0% 100%;
         --card-foreground: 222.2 84% 4.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 222.2 84% 4.9%;
-        --primary: 222.2 47.4% 11.2%;
         --primary-foreground: 210 40% 98%;
         --secondary: 210 40% 96.1%;
         --secondary-foreground: 222.2 47.4% 11.2%;
@@ -33,6 +34,7 @@
     }
     .dark {
         --primary: 200 100% 65%;
+        --primary-hover: 192 100% 80%;
         --primary-foreground: 222.2 47.4% 11.2%;
         --secondary: 217.2 32.6% 17.5%;
         --secondary-foreground: 210 40% 98%;
@@ -40,7 +42,7 @@
         --foreground: 210 40% 98%;
         --card: 222.2 84% 4.9%;
         --card-foreground: 210 40% 98%;
-        --popover: 222.2 84% 4.9%;
+        --popover: 0 0% 27%;
         --popover-foreground: 210 40% 98%;
         --muted: 217.2 32.6% 17.5%;
         --muted-foreground: 215 20.2% 65.1%;
@@ -89,6 +91,17 @@
     }
 }
 
+@layer utilities {
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 :host,
 html,
 body {
@@ -101,9 +114,6 @@ body {
     font-feature-settings:
         "rlig" 1,
         "calt" 1;
-}
-body {
-    /* font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC'; */
 }
 
 svg {
@@ -151,6 +161,48 @@ svg rect {
         @apply right-[calc(var(--br)*-1)];
     }
     @apply relative rounded-t-[var(--br)];
+}
+
+/* .explorer-nav-panel-item::before{
+    content: attr(data-icon);
+    @apply hover:opacity-70 text-xs z-[1] font-segoe-icon pr-1 -ml-2
+} */
+
+body {
+    /* font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC'; */
+    --sepia-opacity: 0.5;
+
+    &::after,
+    &::before {
+        /* for brightness & sepia */
+        content: "";
+        @apply pointer-events-none absolute inset-0 z-[10000] opacity-0 transition-opacity duration-500;
+    }
+
+    &::before {
+        opacity: var(--low-brightness, 0);
+        @apply bg-black
+    }
+
+    &[data-sepia="true"]::after {
+        background-color: #e74e0b;
+        opacity: var(--sepia-opacity, 0.3);
+        @apply mix-blend-multiply
+    }
+}
+
+:root {
+    --Main: hsl(206, 100%, 42%);
+    --Dark1: hsl(192, 100%, 80%);
+    --Dark2: hsl(200, 100%, 65%);
+    --Light1: hsl(215, 100%, 29%);
+    --Light2: hsl(208, 100%, 38%);
+
+    --Main: hsl(323, 100%, 45%);
+    --Dark1: hsl(310, 100%, 79%);
+    --Dark2: hsl(318, 100%, 65%);
+    --Light1: hsl(327, 100%, 30%);
+    --Light2: hsl(324, 100%, 40%);
 }
 
 .container {
@@ -276,4 +328,38 @@ input::-webkit-clear-button,
 input::-webkit-inner-spin-button,
 input::-webkit-textfield-decoration-container {
     display: none;
+}
+
+.taskbarBtn,
+.dialogBtn {
+    &[aria-haspopup="dialog"][data-state="open"] {
+        @apply pointer-events-none;
+    }
+    &[data-state="open"],
+    &:hover,
+    &:focus-visible {
+        @apply border-border/50 bg-foreground/5;
+    }
+}
+
+.quickSettingBtn {
+    &:has(:checked) {
+        &:not(:has(.splitBtn)), .splitBtn{
+            @apply bg-primary text-primary-foreground hocus-visible:bg-primary-hover;
+        }
+    }
+
+    &:has(:focus-visible) {
+        @apply ring-2 ring-foreground
+    }
+
+    &:not(:has(:checked)) {
+        &:not(:has(.splitBtn)), .splitBtn{
+            @apply bg-foreground/5 not-active:hocus-visible:bg-foreground/10;
+        }
+    }
+}
+
+*:has(.p-overflow-hide){
+    overflow: hidden;
 }

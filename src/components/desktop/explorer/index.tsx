@@ -37,10 +37,13 @@ function ExplorerItem() {
                                       height: "600px",
                                   },
                               },
+                              style: {
+                                  "--titlebar-height": "92px",
+                              },
                           },
                           titleBar: {
                               className:
-                                  "bg-background/90 grid grid-cols-[1fr_auto]",
+                                  "bg-background/80 grid grid-cols-[1fr_auto]",
                               getTitleBarChild: ExplorerTitleBar,
                           },
                       }

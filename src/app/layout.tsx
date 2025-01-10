@@ -7,6 +7,8 @@ import "@/styles/globals.css";
 import Screen from "@/components/desktop/screen";
 import { roboto, SegoeUIDisplayFont, SegoIconFont } from "@/font";
 import { LoadingHelper } from "@/lib/loading/loading-comps";
+import { ThemeHelper } from "@/hooks/useTheme";
+import SettingInit from "@/lib/Setting/setting-init";
 let ShadcnThemeEditor: any;
 if (process.env.NODE_ENV === "development") {
     import("shadcn-theme-editor").then((module) => {
@@ -42,27 +44,31 @@ function Body({ children }: { children: React.ReactNode }) {
             className={`!pointer-events-auto fixed min-h-screen ${roboto.className} ${SegoIconFont.variable} ${SegoeUIDisplayFont.variable}`}
             // style={{fontFamily: roboto.style.fontFamily}}
         >
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                <Suspense fallback={true}>
-                    <ProgressBar
-                        color="#333"
-                        height="2px"
-                        options={{
-                            showSpinner: false,
-                        }}
-                    />
-                    <LoadingHelper />
-                </Suspense>
-                {children}
-                <ShadcnThemeEditor />
-                <TailwindIndicator />
-            </ThemeProvider>
-            <button id="button" className="size-0 opacity-0" />
+            <Suspense fallback={<>Loading.............</>}>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <Suspense fallback={true}>
+                        <ProgressBar
+                            color="#333"
+                            height="2px"
+                            options={{
+                                showSpinner: false,
+                            }}
+                        />
+                        <LoadingHelper />
+                    </Suspense>
+                    {children}
+                    <ShadcnThemeEditor />
+                    <TailwindIndicator />
+                    <ThemeHelper />
+                    <SettingInit />
+                </ThemeProvider>
+                <button id="button" className="size-0 opacity-0" />
+            </Suspense>
         </body>
     );
 }

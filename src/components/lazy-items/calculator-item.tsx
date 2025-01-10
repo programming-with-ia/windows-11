@@ -18,8 +18,15 @@ function CalculatorItem() {
                 win={{
                     child: isWinShow ? <Calculator /> : "nothing",
                     id: "calculator",
-                    className: "backdrop-blur-2xl bg-background/80",
-                    resizeAbleProps: { minWidth: 270, minHeight: 415 },
+                    className: "bg-transparent",
+                    resizeAbleProps: {
+                        minWidth: "fit-content",
+                        minHeight: "fit-content",
+                    },
+                    wrapperClassName: "backdrop-blur-2xl bg-background/80"
+                }}
+                titleBar={{
+                    className: "backdrop-blur-none bg-transparent",
                 }}
             />
         </>

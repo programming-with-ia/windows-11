@@ -1,9 +1,12 @@
 import { createEmittor } from "emittor";
+import { setWindow } from "../utils";
 
 export const loadingEmittor = createEmittor({
     manualLoading: false,
     pageLoading: false,
 });
+
+setWindow("loadingEmittor", loadingEmittor);
 
 export const loadingManager = {
     emittor: loadingEmittor,

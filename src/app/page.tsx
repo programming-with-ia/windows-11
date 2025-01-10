@@ -39,8 +39,8 @@ import { DesktopIcons } from "@/lib/images";
 
 function Page() {
     //* need this
-    const isSignedIn = useIsSignedIn();
-    if (!isSignedIn) return null;
+    // const isSignedIn = useIsSignedIn();
+    // if (!isSignedIn) return null;
     return (
         <Wrapper>
             <ContextMenuWrapper>
@@ -178,7 +178,7 @@ function DesktopMenuHandler({
 function ContextMenuWrapper({ children }: React.ComponentProps<"div">) {
     const MenuIcon = withDefaultProps(
         Component<typeof SegoeIcon | typeof GridViewAll>,
-        { className: "size-4 fill-current text-foreground/70 mr-2" },
+        { className: "size-4 fill-current text-foreground/70" },
     );
     const Arrow = (
         <SegoeIcon
@@ -193,7 +193,7 @@ function ContextMenuWrapper({ children }: React.ComponentProps<"div">) {
             }
         >
             <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-            <ContextMenuContent>
+            <ContextMenuContent collisionPadding={{ bottom: 60 }}>
                 <DesktopMenuHandler
                     DesktopMenuItems={
                         <>
@@ -259,6 +259,11 @@ function ContextMenuWrapper({ children }: React.ComponentProps<"div">) {
 
 function Wrapper({ children }: React.ComponentPropsWithRef<"div">) {
     useEffect(() => {
+        const url = new URL(window.location.href);
+        url.search = "";
+        history.replaceState(null, "", url.toString());
+
+        // todo
         const element = document.getElementById("lazy-load-fix");
         if (!element) return;
         console.log("observing...", element);

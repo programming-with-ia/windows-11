@@ -7,178 +7,109 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable";
 // import Image from "next/image";
-import Link from "next/link";
-import { Slot } from "@radix-ui/react-slot";
-import clsx from "clsx";
-import ThisPC from "@/app/_components/this-pc";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import type { CompoProps } from "@/types/types";
-import { TbArrowElbowRight } from "react-icons/tb";
-import { FaSquareXTwitter } from "react-icons/fa6";
 import { useEmittor } from "emittor";
-import { explorerTabEmittor } from "./emittors";
+import { explorerPathEmittor } from "./emittors";
 import SegoeIcon from "@/components/segoe-ui-icon";
 import { ExplorerItems } from "./_components/explorer-items";
-import { doubleClick } from "@/lib/utils";
-import { DesktopIcons, ExplorerIcons, GH_PublicTree } from "@/lib/images";
+import { joinPath } from "@/lib/utils";
+import { DesktopIcons, ExplorerIcons } from "@/lib/images";
 import { prefetchImages } from "@/lib/preload-images";
+import FolderTree, { type NavigationTreeNode } from "./navigation-pane";
+import { getDataByPath, navigationData, skills } from "./data";
+import ThisPC from "@/app/_components/this-pc";
 
-// use images from GitHub repo
-const skills = (
-    [
-        { icon: "/skills/js.png", label: "JavaScript" },
-        { icon: "/skills/mongodb.png", label: "MongoDB" },
-        { icon: "/skills/mui.png", label: "Material UI" },
-        { icon: "/skills/mysql.png", label: "MySQL" },
-        { icon: "/skills/next.png", label: "Next.js" },
-        { icon: "/skills/node.png", label: "Node.js" },
-        { icon: "/skills/postgresql.png", label: "PostgreSQL" },
-        { icon: "/skills/prisma.png", label: "Prisma" },
-        { icon: "/skills/react.png", label: "React" },
-        { icon: "/skills/reactnative.png", label: "React Native" },
-        { icon: "/skills/reactquery.png", label: "React Query" },
-        { icon: "/skills/redux.png", label: "Redux" },
-        { icon: "/skills/stripe.png", label: "Stripe" },
-        { icon: "/skills/tailwind.png", label: "Tailwind CSS" },
-        { icon: "/skills/tauri.png", label: "Tauri" },
-        { icon: "/skills/ts.png", label: "TypeScript" },
-        { icon: "/skills/css.png", label: "CSS" },
-        { icon: "/skills/docker.png", label: "Docker" },
-        { icon: "/skills/express.png", label: "Express" },
-        { icon: "/skills/figma.png", label: "Figma" },
-        { icon: "/skills/firebase.png", label: "Firebase" },
-        { icon: "/skills/framer.png", label: "Framer Motion" },
-        { icon: "/skills/go.png", label: "Go" },
-        { icon: "/skills/graphql.png", label: "GraphQL" },
-        { icon: "/skills/html.png", label: "HTML" },
-    ] as const
-).map((s) => ({ label: s.label, icon: `${GH_PublicTree}${s.icon}` }));
+function ExplorerView({
+    data,
+    path,
+    folderNames,
+}: {
+    path: string;
+    data: NavigationTreeNode | undefined;
+    folderNames: string[];
+}) {
+    const emptyMessage = (
+        <span className="mx-auto text-[13px]">This folder is empty.</span>
+    );
 
-const tabs: Array<
-    {
-        title: string;
-        id: string;
-        img?:
-            | string
-            | ((p: CompoProps<typeof GitHubLogoIcon>) => React.ReactNode);
-        tab?: () => React.ReactNode;
-        props?: React.ComponentProps<"button" | "a">;
-    } & (
-        | { href: string; tab?: undefined }
-        | {
-              href?: undefined;
-              tab: () => React.ReactNode;
-          }
-    )
-> = [
-    {
-        title: "This PC",
-        id: "this-pc",
-        img: DesktopIcons.PC,
-        tab: ThisPC,
-    },
-    {
-        title: "About Me",
-        id: "about-me",
-        img: ExplorerIcons.UserFolder,
-        tab: AboutTab,
-    },
-    {
-        title: "Skills",
-        id: "skills",
-        img: "/icons/tools-folder.png",
-        tab: SkillsTab,
-    },
-    {
-        title: "Projects",
-        id: "projects",
-        img: "/icons/projects.png",
-        tab: ProjectsTab,
-    },
-    {
-        title: "Github",
-        id: "github",
-        img: GitHubLogoIcon,
-        href: "https://www.github.com",
-        props: { target: "_blank" },
-    },
-    {
-        title: "Twitter (X)",
-        id: "twitter",
-        img: FaSquareXTwitter,
-        href: "https://www.x.com",
-        props: { target: "_blank" },
-    },
-] as const;
-
-const explorerTabMapped = {
-    "about-me": AboutTab,
-    "about-info": AboutInfoTab,
-    skills: SkillsTab,
-    projects: ProjectsTab,
-    "this-pc": ThisPC,
-} as const;
-
-export type explorerTabsType = keyof typeof explorerTabMapped;
-
-function AboutTab() {
+    if (!data?.folders && !data?.files) return emptyMessage;
     return (
         <>
-            <ExplorerItems.Large
-                icon={ExplorerIcons.UserFolder}
-                label="Info"
-                onDoubleClick={() => explorerTabEmittor.emit("about-info")}
-            />
-            <ExplorerItems.Large
-                icon="/icons/tools-folder.png"
-                onDoubleClick={() => explorerTabEmittor.emit("skills")}
-                label="Skills"
-            />
-            <ExplorerItems.Large
-                icon="/icons/projects.png"
-                // onDoubleClick={() => explorerTabEmittor.emit('projects')}
-                onDoubleClick={() => doubleClick("projects-desktop-item")}
-                label="Projects"
-                isShortcut
-            />
-            <ExplorerItems.Large
-                onDoubleClick={() =>
-                    window.open("https://www.github.com", "_blank")
-                }
-                icon={DesktopIcons.GithubIcon}
-                label="Github"
-                isShortcut
-            />
+            {data && (
+                <>
+                    {data.folders &&
+                        folderNames.map((folderN, idx) => {
+                            const icon = data.folders?.[folderN]?.icon;
+                            const currentPath = joinPath(path, folderN);
+                            return (
+                                <ExplorerItems.Large
+                                    label={folderN}
+                                    icon={icon ?? DesktopIcons.Folder}
+                                    key={idx}
+                                    data-path={currentPath}
+                                    onDoubleClick={() =>
+                                        explorerPathEmittor.setState(
+                                            currentPath,
+                                        )
+                                    }
+                                />
+                            );
+                        })}
+
+                    {data.files?.map((fileN, idx) => (
+                        <ExplorerItems.Large
+                            key={idx}
+                            label={fileN}
+                            icon={DesktopIcons.Chrome}
+                        />
+                    ))}
+                </>
+            )}
         </>
     );
 }
-function AboutInfoTab() {
-    return (
-        <iframe
-            src="https://odocs-md.vercel.app/shadcn-theme-editor"
-            className="size-full"
-        />
-    );
-}
-function SkillsTab() {
-    useEffect(() => {
-        console.log("Skills Tab useEffect");
-    });
+
+function ExplorerPathView() {
+    const [currentPath, setCurrentPath] = useEmittor(explorerPathEmittor);
+    const pathParts = currentPath?.split("\\") ?? [];
     return (
         <>
-            {skills.map((skill, idx) => (
-                <ExplorerItems.Large
-                    className="gap-1"
-                    label={skill.label}
-                    icon={skill.icon}
-                    key={idx}
+            <div
+                style={{ maxWidth: "calc(100% - 22rem)" }}
+                className="inline-flex flex-1 snap-x snap-proximity items-center overflow-x-auto rounded-md bg-foreground/5 px-3.5 py-1 font-segoe-ui-display text-foreground/80 scrollbar-none *:snap-start"
+            >
+                <SegoeIcon icon="TVMonitor" />
+                <SegoeIcon
+                    icon="Chevron Right"
+                    role="button"
+                    className="flex ml-1.5 size-6 items-center justify-center rounded-md p-2 text-xs text-foreground hover:bg-foreground/5"
                 />
-            ))}
+                <div className="flex text-nowrap">
+                    {pathParts.map((part, idx) => (
+                        <span
+                            onClick={() =>
+                                explorerPathEmittor.setState(
+                                    joinPath(...pathParts.slice(0, idx + 1)),
+                                )
+                            }
+                            key={idx}
+                            className="inline-flex snap-start overflow-hidden rounded-md border border-transparent hover:border-foreground/5"
+                        >
+                            <span className="inline-flex items-center px-2.5 hover:bg-foreground/5">
+                                {part}
+                            </span>
+                            {idx < pathParts.length - 1 && (
+                                <SegoeIcon
+                                    icon="Chevron Right"
+                                    className="px-1 py-1 text-xs hover:bg-foreground/5"
+                                    onClick={(e)=>e.stopPropagation()}
+                                />
+                            )}
+                        </span>
+                    ))}
+                </div>
+            </div>
         </>
     );
-}
-function ProjectsTab() {
-    return <div>Projects</div>;
 }
 
 export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
@@ -216,14 +147,8 @@ export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
                 <SegoeIcon icon="Arrow Up" className="p-2" />
 
                 <SegoeIcon icon="Refresh" className="p-2" />
-                <div className="inline-flex flex-1 items-center gap-1 rounded-md bg-foreground/5 px-3.5 py-1 text-foreground/80">
-                    <SegoeIcon icon="TVMonitor" className="" />
-                    <SegoeIcon
-                        icon="Chevron Right"
-                        className="flex size-6 items-center justify-center rounded-md p-2 text-xs text-foreground hover:bg-foreground/5"
-                    />
-                </div>
-                <span className="inline-flex h-full min-w-44 items-center rounded-md bg-foreground/5 px-3.5 py-1.5 text-sm text-foreground/70">
+                <ExplorerPathView />
+                <span className="ml-auto inline-flex h-full min-w-44 items-center rounded-md bg-foreground/5 px-3.5 py-1.5 text-sm text-foreground/70">
                     Search This PC
                 </span>
             </div>
@@ -232,17 +157,16 @@ export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
 }
 
 export function ExplorerMain() {
-    const [CurrentTabKey, setCurrentTab] = useEmittor(
-        // <
-        //     (() => React.ReactNode) | undefined
-        // >
-        explorerTabEmittor,
-        "about-me",
-    );
-    const CurrentTab = explorerTabMapped[CurrentTabKey ?? "about-me"];
+    const [currentPath, setCurrentPath] = useEmittor(explorerPathEmittor);
+    const isThisPC = currentPath == "This PC";
+    const data = isThisPC ? {} : getDataByPath(currentPath ?? "");
+    const folderNames = data.folders ? Object.keys(data.folders) : [];
 
     useEffect(() => {
-        prefetchImages(skills.map((skill) => skill.icon));
+        prefetchImages([
+            ...skills.map((skill) => skill.icon),
+            ...Object.values(ExplorerIcons),
+        ]);
     }, []);
 
     return (
@@ -269,75 +193,45 @@ export function ExplorerMain() {
                 </React.Fragment> */}
             </div>
             <ResizablePanelGroup
-                className="flex-1 select-none"
+                className="flex-1 select-none font-segoe-ui-display"
                 direction="horizontal"
-                autoSaveId="explorer-sidebar"
+                autoSaveId="explorer-sidebar-width"
             >
-                <ResizablePanel
-                    defaultSize={30}
-                    collapsible
-                    maxSize={40}
-                    minSize={15}
-                    className="flex max-w-80 flex-col px-1 py-2"
-                >
-                    {tabs.map((item, idx) => {
-                        const Child = (
-                            <>
-                                {item.img &&
-                                    (typeof item.img == "string" ? (
-                                        <span>
-                                            {
-                                                <img
-                                                    src={item.img}
-                                                    alt={item.title}
-                                                    width={16}
-                                                    height={16}
-                                                />
-                                            }
-                                        </span>
-                                    ) : (
-                                        <item.img className="size-4" />
-                                    ))}
-                                {item.title}
-                            </>
-                        );
-                        return (
-                            <Slot
-                                key={idx}
-                                className="group inline-flex items-center gap-2 rounded-sm border border-dotted border-transparent px-2.5 py-1.5 text-sm outline-none hover:bg-foreground/5 focus-visible:border-muted-foreground/80"
-                                {...item.props}
+                {React.useMemo(
+                    () => (
+                        <>
+                            <ResizablePanel
+                                defaultSize={30}
+                                collapsible
+                                maxSize={40}
+                                minSize={15}
+                                className="gird fluent-scrollbar max-w-80 select-none !overflow-y-auto pl-4 text-sm text-foreground/90"
                             >
-                                {item.href ? (
-                                    <Link href={item.href}>
-                                        {Child}
-                                        <TbArrowElbowRight className="ml-auto size-3 text-muted-foreground opacity-0 group-hover:opacity-100" />
-                                    </Link>
-                                ) : (
-                                    <button
-                                        className={clsx(
-                                            CurrentTab == item.tab &&
-                                                "bg-foreground/10",
-                                        )}
-                                        type="button"
-                                        onClick={() =>
-                                            setCurrentTab(item.id as any)
-                                        }
-                                    >
-                                        {Child}
-                                    </button>
-                                )}
-                            </Slot>
-                        );
-                    })}
-                </ResizablePanel>
-                <ResizableHandle className="w-1 bg-foreground/10 hover:bg-foreground/15" />
+                                <FolderTree data={navigationData} />
+                            </ResizablePanel>
+                            <ResizableHandle className="w-1 bg-foreground/10 hover:bg-foreground/15" />
+                        </>
+                    ),
+                    [],
+                )}
                 <ResizablePanel
                     style={{ overflow: "auto" }}
-                    className="customScrollBar flex max-h-full flex-wrap content-start gap-1 overflow-auto p-0.5 text-foreground/80"
+                    className="fluent-scrollbar flex max-h-full flex-wrap content-start gap-1 overflow-auto p-0.5 text-foreground/80"
                 >
-                    {CurrentTab && <CurrentTab />}
+                    {isThisPC ? (
+                        <ThisPC />
+                    ) : (
+                        <ExplorerView
+                            folderNames={folderNames}
+                            data={data}
+                            path={currentPath ?? ""}
+                        />
+                    )}
                 </ResizablePanel>
             </ResizablePanelGroup>
+            <div className="bg-foreground/2 flex select-none px-4 py-0.5 text-[13px] opacity-80">
+                {folderNames.length + (data.files?.length ?? 0)} items |{" "}
+            </div>
         </>
     );
 }
