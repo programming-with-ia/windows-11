@@ -1,21 +1,20 @@
 import { DesktopItemBase } from "./desktop-item";
 import { openExplorer } from "@/components/desktop/explorer/emittors";
-import type { explorerTabsType } from "@/components/desktop/explorer/explorer";
 import { DesktopIcons } from "@/lib/images";
 
 function ExplorerDesktopItem({
     name,
-    explorerTab,
+    explorerPath,
     icon = DesktopIcons.Folder,
 }: {
     icon?: string;
     name: string;
-    explorerTab: explorerTabsType;
+    explorerPath: string;
 }) {
     return (
         <DesktopItemBase
-            id={`${explorerTab}-explorer-desktop-item`}
-            onDoubleClick={() => openExplorer(explorerTab)}
+            id={`${explorerPath}-explorer-desktop-item`}
+            onDoubleClick={() => openExplorer(explorerPath)}
             icon={icon}
             name={name}
         />

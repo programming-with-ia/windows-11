@@ -12,7 +12,7 @@ const HorizontalScrollCarousel: FC<Props> = ({ children, childLength }) => {
     // Set the container dynamically after mounting
     useEffect(() => {
         const element = document.querySelector(
-            "#projects>[data-win-viewport]",
+            "#projects>[data-win-viewport]", //! fix later
         ) as HTMLElement | null;
         if (element) {
             containerRef.current = element;

@@ -35,7 +35,10 @@ import Link from "next/link";
 import { loadingManager } from "@/lib/loading/loading-manager";
 import { prefetchImages } from "@/lib/preload-images";
 import { DesktopIcons } from "@/lib/images";
-import { setCookie } from 'cookies-next/client';
+import { setCookie, hasCookie } from "cookies-next/client";
+import { env } from "@/env";
+import debounce from "lodash.debounce";
+import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
 
 const lockScreenStatus = {
     normal: "0",
@@ -88,6 +91,7 @@ function LockScreen() {
     const imgScale = useTransform(scrollYProgress, [0.1, 1], [1, 1.2]);
     const imgBlur = useTransform(scrollYProgress, [0.1, 1], [0, 12]);
     const timeLayerOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]); // for lockscreen time layer
+
     const passwordLayerOpacity = useTransform(
         scrollYProgress,
         [0.8, 1],
@@ -103,19 +107,22 @@ function LockScreen() {
         console.log("redirect to home");
         isSignedIn.setState(true);
         loadingManager.setManualLoading(true);
-        setCookie("authorized", true, {
-            maxAge: 120,
-        })
-        // router.push("/?authorized=true");
-        router.push("/"); //* routes.desktop
+        console.log("router.push", router.push);
+        // setCookie("authorized", true, {
+        //     maxAge: 120,
+        // });
+        console.log("pushing");
+        router.push("/?authorized=true");
+        // router.push("/"); //* routes.desktop
     };
 
     // Scroll Helpers
     const scrollToBottom = () => {
         screenState.current = lockScreenStatus.password;
-        lenisRef.current?.wrapper?.classList.add("active-passwordScreen");
-        lenisRef.current?.lenis?.scrollTo(
-            lenisRef.current.wrapper?.scrollHeight ?? 0,
+        if (!lenisRef.current?.wrapper) return 0;
+        lenisRef.current.wrapper.classList.add("active-passwordScreen");
+        lenisRef.current.lenis?.scrollTo(
+            lenisRef.current.wrapper.scrollHeight,
             { duration: 0.2, lock: true, onComplete: (e) => e.stop() },
         );
     };
@@ -166,7 +173,7 @@ function LockScreen() {
     useEffect(() => {
         setIsMount(true);
         if (!isMount) return;
-        router.prefetch(routes.desktop);
+        router.prefetch(routes.desktop, { kind: PrefetchKind.FULL });
         const handleKeyPress = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 scrollToTop();
@@ -191,6 +198,30 @@ function LockScreen() {
                 ? scrollToBottom()
                 : debounceScrollToTop();
         };
+
+        const keepCurrent = debounce(() => {
+            console.log("keepCurrent");
+            if (!lenisRef.current?.wrapper) return 0;
+
+            const scroll = lenisRef.current?.wrapper?.classList.contains(
+                "active-passwordScreen",
+            )
+                ? lenisRef.current.wrapper.scrollHeight
+                : 0;
+
+            lenisRef.current.wrapper.scrollTo({
+                top: scroll,
+                behavior: "instant",
+            });
+
+            //! not work
+            // lenisRef.current.lenis?.scrollTo(scroll, {
+            //     immediate: true,
+            //     force: true,
+            //     lock: lenisRef.current.lenis.isLocked,
+            // });
+        }, 200);
+
         // const handleWheel = (e: Event) => {
         //     if (screenState.current == lockScreenStatus.password) {
         //         e.preventDefault()
@@ -200,20 +231,22 @@ function LockScreen() {
         const wrapper = lenisRef.current?.wrapper;
         window.addEventListener("keydown", handleKeyPress);
         wrapper?.addEventListener("scroll", handleScroll);
+        window.addEventListener("resize", keepCurrent);
         // wrapper?.addEventListener("wheel", handleWheel);
 
         return () => {
             window.removeEventListener("keydown", handleKeyPress);
             wrapper?.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("resize", keepCurrent);
             // wrapper?.removeEventListener("wheel", handleWheel);
         };
-    }, [isMount, debounceScrollToTop]);
+    }, [isMount]);
 
     useEffect(() => {
         if (!isMount) return;
 
         const intervalId = setInterval(() => {
-            console.log(document.readyState)
+            console.log(document.readyState);
             if (document.readyState === "complete") {
                 prefetchImages(Object.values(DesktopIcons));
                 clearInterval(intervalId);
@@ -230,7 +263,7 @@ function LockScreen() {
             options={{ easing: (t) => t, duration: 0.1 }}
             root={false}
             ref={lenisRef}
-            className="group/lock fixed inset-0 z-50 select-none scrollbar-hide overflow-y-scroll bg-white dark:bg-black"
+            className="group/lock scrollbar-hide dark fixed inset-0 z-50 select-none overflow-y-scroll bg-white text-foreground dark:bg-black"
             props={{
                 onPointerDown: handlePointerDown,
                 onPointerUp: handlePointerUp,
@@ -274,7 +307,7 @@ function LockScreen() {
                     scale: passwordLayerScale,
                 }}
                 tabIndex={-1}
-                className="passwordScreen acrylic-noise outline-none sticky bottom-0 flex h-screen flex-col" // group-[:not(.pointer-events-none)]/lock:!pointer-events-none
+                className="passwordScreen acrylic-noise sticky bottom-0 flex h-screen flex-col outline-none" // group-[:not(.pointer-events-none)]/lock:!pointer-events-none
             >
                 <div className="flex flex-1 flex-col items-center justify-center gap-4 self-center justify-self-stretch">
                     <SegoeIcon

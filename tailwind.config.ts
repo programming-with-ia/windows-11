@@ -53,7 +53,7 @@ export default {
                     foreground: "hsl(var(--primary-foreground))",
                     hover: "hsl(var(--primary-hover))",
                     // hover: "#99ebff",
-                    icon: "#4dc6ff",
+                    icon: "hsl(var(--primary-icon))",
                 },
                 secondary: {
                     DEFAULT: "hsl(var(--secondary))",
@@ -117,7 +117,11 @@ export default {
             addVariant("hocus-within", ["&:hover", "&:focus-within"]);
             addVariant("not-active", ["&:not(:active)"]);
         }),
-        require('tailwindcss-elevation'),
+        require('tailwindcss-elevation')(
+            {
+                color: "var(--elevation-shadow)"
+            }
+        ),
         function ({ addVariant, e }) {
             // input-types
             // Define the input types we want to support

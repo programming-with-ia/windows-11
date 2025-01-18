@@ -59,7 +59,7 @@ function ExplorerView({
                         <ExplorerItems.Large
                             key={idx}
                             label={fileN}
-                            icon={DesktopIcons.Chrome}
+                            icon={ExplorerIcons.SimpleFile}
                         />
                     ))}
                 </>
@@ -81,7 +81,7 @@ function ExplorerPathView() {
                 <SegoeIcon
                     icon="Chevron Right"
                     role="button"
-                    className="flex ml-1.5 size-6 items-center justify-center rounded-md p-2 text-xs text-foreground hover:bg-foreground/5"
+                    className="ml-1.5 flex size-6 items-center justify-center rounded-md p-2 text-xs text-foreground hover:bg-foreground/5"
                 />
                 <div className="flex text-nowrap">
                     {pathParts.map((part, idx) => (
@@ -101,7 +101,7 @@ function ExplorerPathView() {
                                 <SegoeIcon
                                     icon="Chevron Right"
                                     className="px-1 py-1 text-xs hover:bg-foreground/5"
-                                    onClick={(e)=>e.stopPropagation()}
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             )}
                         </span>
@@ -118,10 +118,11 @@ export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
             <div
                 className="w-fit cursor-default px-3 pt-2"
                 onPointerDown={(e) => e.stopPropagation()}
+                onDoubleClick={(e)=> e.stopPropagation()}
             >
                 <div
                     data-explorer-tab
-                    className="relative inline-flex min-w-60 items-center gap-2.5 bg-foreground/5 pl-2.5 text-xs"
+                    className="winIgnoreDrag relative inline-flex min-w-60 items-center gap-2.5 bg-foreground/5 pl-2.5 text-xs"
                 >
                     <img
                         src={DesktopIcons.Explorer}
@@ -136,7 +137,7 @@ export function ExplorerTitleBar({ controls }: { controls: React.ReactNode }) {
             </div>
             {controls}
             <div
-                className="col-span-2 inline-flex w-full cursor-default items-center gap-3 bg-foreground/5 px-4 py-2 text-[14px] text-foreground/80"
+                className="winIgnoreDrag col-span-2 inline-flex w-full cursor-default items-center gap-3 bg-foreground/5 px-4 py-2 text-[14px] text-foreground/80"
                 onPointerDown={(e) => e.stopPropagation()}
                 onDoubleClick={(e) => e.stopPropagation()}
             >
@@ -229,7 +230,7 @@ export function ExplorerMain() {
                     )}
                 </ResizablePanel>
             </ResizablePanelGroup>
-            <div className="bg-foreground/2 flex select-none px-4 py-0.5 text-[13px] opacity-80">
+            <div className="flex select-none bg-foreground/2 px-4 py-0.5 text-[13px] opacity-80">
                 {folderNames.length + (data.files?.length ?? 0)} items |{" "}
             </div>
         </>

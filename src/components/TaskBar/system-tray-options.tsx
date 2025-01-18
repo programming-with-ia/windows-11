@@ -155,7 +155,7 @@ export function SystemTrayOptions(
                     </button>
                 </DialogTrigger>
                 <DialogContent
-                    className="bottom-14 right-3 w-[360px] overflow-hidden p-0 font-segoe-ui-display text-foreground/90 !duration-200"
+                    className="bottom-[3.75rem] right-3 w-[360px] overflow-hidden p-0 font-segoe-ui-display text-foreground/90 !duration-200"
                     side={"bottom"}
                     align={"right"}
                     from={"bottom"}
@@ -249,7 +249,7 @@ export function SystemTrayOptions(
                             </div>
                         </div>
                     </div>
-                    <div className="flex bg-background/50 p-1">
+                    <div className="flex bg-background/50 p-1 dark:bg-black/20">
                         {supported && (
                             <div
                                 className={cn(

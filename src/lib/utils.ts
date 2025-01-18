@@ -71,3 +71,36 @@ export function setWindow(key: string, value: any){
     if (typeof window == "undefined") return
     (window as any)[key] = value
 }
+
+export function getTranslateValues(transform: string) {
+    const df = { x: 0, y: 0 };
+
+    // If no transform is applied, return default values
+    if (!transform || transform === "none") {
+        return df;
+    }
+
+    // Check for `translateX` and `translateY` separately
+    const translateXMatch = /translateX\((-?\d+\.?\d*)px\)/.exec(transform);
+    const translateYMatch = /translateY\((-?\d+\.?\d*)px\)/.exec(transform);
+
+    // Extract values and parse as numbers
+    const x = translateXMatch ? parseFloat(translateXMatch[1]!) : df.x;
+    const y = translateYMatch ? parseFloat(translateYMatch[1]!) : df.y;
+
+    // Handle the case where transform is directly `translate(...)`
+    const translate = /translate\(([^)]+)\)/.exec(transform);
+    if (translate) {
+        const values = translate[1]
+            ?.split(/,\s*/)
+            .map((value) => parseFloat(value));
+
+        return {
+            x: values?.[0] ?? x,
+            y: values?.[1] ?? y,
+        };
+    }
+
+    // Return extracted or default values
+    return { x, y };
+}

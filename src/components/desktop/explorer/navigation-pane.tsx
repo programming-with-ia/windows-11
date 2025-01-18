@@ -31,7 +31,7 @@ interface FolderNodeProps {
 
 const NavigationItem = withDefaultProps("button", {
     className:
-        "flex items-center text-nowrap py-1.5 cursor-default bleed-bg-l hocus:bleed-foreground/5",
+        "flex items-center text-nowrap py-1.5 cursor-default bleed-bg-l hocus:bleed-foreground/5 justify-self-stretch",
 });
 
 const FolderNode: React.FC<FolderNodeProps> = ({

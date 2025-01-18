@@ -7,22 +7,24 @@
     :root {
         --primary: 208 100% 38%;
         --primary-hover: 215 100% 29%;
+        /* --primary-icon: 206 86% 45%; */
+        --primary-icon: 207 100% 38%;
         --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
+        --foreground: 0 0% 0%;
         --card: 0 0% 100%;
         --card-foreground: 222.2 84% 4.9%;
         --popover: 0 0% 100%;
         --popover-foreground: 222.2 84% 4.9%;
         --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96.1%;
+        --secondary: 0 0% 95%;
         --secondary-foreground: 222.2 47.4% 11.2%;
-        --muted: 210 40% 96.1%;
+        --muted: 0 0% 95%;
         --muted-foreground: 215.4 16.3% 46.9%;
-        --accent: 210 40% 96.1%;
+        --accent: 0 0% 95%;
         --accent-foreground: 222.2 47.4% 11.2%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 210 40% 98%;
-        --border: 214.3 31.8% 91.4%;
+        --border: 216 17% 83%;
         --input: 214.3 31.8% 91.4%;
         --ring: 222.2 84% 4.9%;
         --chart-1: 12 76% 61%;
@@ -31,12 +33,15 @@
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
+
+        --elevation-shadow: 80, 80, 80;
     }
     .dark {
         --primary: 200 100% 65%;
         --primary-hover: 192 100% 80%;
+        --primary-icon: 199 100% 65%;
         --primary-foreground: 222.2 47.4% 11.2%;
-        --secondary: 217.2 32.6% 17.5%;
+        --secondary: 217.2 2% 17.5%;
         --secondary-foreground: 210 40% 98%;
         --background: 0 0% 10%;
         --foreground: 210 40% 98%;
@@ -58,6 +63,8 @@
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
+
+        --elevation-shadow: 0, 0, 0;
     }
 }
 @layer base {
@@ -85,7 +92,7 @@
         &::before {
             content: "";
             background-image: url("/noise.png");
-            @apply absolute inset-0 z-[-1] bg-repeat opacity-5;
+            @apply absolute inset-0 z-[-1] bg-repeat opacity-[0.03];
         }
         @apply relative;
     }
@@ -138,6 +145,12 @@ svg rect {
     }
 }
 
+.react-draggable-dragging {
+    .resize-handles, [data-win-viewport] {
+        @apply !pointer-events-none;
+    }
+}
+
 [data-explorer-tab] {
     --br: 0.75rem;
     --bg: hsl(var(--foreground) / 0.05);
@@ -181,13 +194,13 @@ body {
 
     &::before {
         opacity: var(--low-brightness, 0);
-        @apply bg-black
+        @apply bg-black;
     }
 
     &[data-sepia="true"]::after {
         background-color: #e74e0b;
         opacity: var(--sepia-opacity, 0.3);
-        @apply mix-blend-multiply
+        @apply mix-blend-multiply;
     }
 }
 
@@ -344,22 +357,24 @@ input::-webkit-textfield-decoration-container {
 
 .quickSettingBtn {
     &:has(:checked) {
-        &:not(:has(.splitBtn)), .splitBtn{
+        &:not(:has(.splitBtn)),
+        .splitBtn {
             @apply bg-primary text-primary-foreground hocus-visible:bg-primary-hover;
         }
     }
 
     &:has(:focus-visible) {
-        @apply ring-2 ring-foreground
+        @apply ring-2 ring-foreground;
     }
 
     &:not(:has(:checked)) {
-        &:not(:has(.splitBtn)), .splitBtn{
+        &:not(:has(.splitBtn)),
+        .splitBtn {
             @apply bg-foreground/5 not-active:hocus-visible:bg-foreground/10;
         }
     }
 }
 
-*:has(.p-overflow-hide){
+/* *:has(.p-overflow-hide) {
     overflow: hidden;
-}
+} */

@@ -1,11 +1,13 @@
 import { createEmittor } from "emittor";
-import type {  } from "./explorer";
+import type {} from "./explorer";
 import { doubleClick, joinPath } from "@/lib/utils";
 
 export const CommonPaths = {
     user: joinPath("This PC", "Local Disk (C:)", "Users", "Admin"),
     pc: "This PC",
-} as const;
+    desktop: "",
+};
+CommonPaths.desktop = joinPath(CommonPaths.user, "Desktop");
 
 export const explorerPathEmittor = createEmittor<string | undefined>(
     CommonPaths.pc,

@@ -57,7 +57,7 @@ export const dialogVariantsObj = {
         // center: "data-[state=closed]:slide-out-to-left-1/2 data-[state=open]:slide-in-from-left-1/2",
     },
     mica: {
-        true: "acrylic-noise elevation-5 dark:backdrop-brightness-75 backdrop-blur-2xl rounded-lg bg-secondary/60 border border-foreground/5",
+        true: "acrylic-noise elevation-5 dark:backdrop-brightness-75 backdrop-blur-2xl rounded-lg bg-secondary/80 dark:bg-secondary/50 border border-foreground/5",
         false: null,
     },
 } as const satisfies CVAConfigSchema;
@@ -65,7 +65,7 @@ export const dialogVariantsObj = {
 export const dialogVariants = cva(
     [
         "z-50 fixed grid w-full ease-linear !duration-150 outline-none select-none cursor-default text-foreground p-6",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:invisible",
     ],
     {
         variants: dialogVariantsObj,

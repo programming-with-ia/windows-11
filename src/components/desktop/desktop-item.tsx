@@ -7,32 +7,36 @@ import dynamic from "next/dynamic";
 import { useWinState } from "@/hooks/useWinState";
 import { DesktopItemContextMenuEmittor } from "@/lib/emittors";
 import { DesktopIcons } from "@/lib/images";
+import { Component } from "../component";
+import { composeEventHandlers } from "@radix-ui/primitive";
 // import { AnimatePresence } from "framer-motion";
 const DraggableWindowBase = dynamic(() =>
     import("../drag-window").then((all) => all.DraggableWindowBase),
 );
 
-type DesktopItemProps = React.ComponentProps<"button"> & {
-    icon: string;
-    smallIcon?: boolean;
-    name: string;
-    isShortcut?: boolean;
-    isWindowOpen?: boolean;
-    win?: {
-        child: React.ReactNode;
-    } & Pick<
-        DraggableWindowProps,
-        | "image"
-        | "wrapperClassName"
-        | "className"
-        | "id"
-        | "resizeAbleProps"
-        | "style"
-    >;
-    titleBar?: DraggableWindowProps["titlebar"];
-    taskBarItem?: DraggableWindowProps["taskBarItem"];
-    onWinClose?: DraggableWindowProps["onClose"];
-};
+type DesktopItemProps<E extends React.ElementType = "button"> =
+    React.ComponentProps<E> & {
+        icon: string;
+        smallIcon?: boolean;
+        name: string;
+        isShortcut?: boolean;
+        isWindowOpen?: boolean;
+        As?: E;
+        win?: {
+            child: React.ReactNode;
+        } & Pick<
+            DraggableWindowProps,
+            | "image"
+            | "wrapperClassName"
+            | "className"
+            | "id"
+            | "resizeAbleProps"
+            | "style"
+        >;
+        titleBar?: DraggableWindowProps["titlebar"];
+        taskBarItem?: DraggableWindowProps["taskBarItem"];
+        onWinClose?: DraggableWindowProps["onClose"];
+    };
 
 export const taskbarBtnClick = (winId: string | undefined) => {
     if (!winId) return;
@@ -45,7 +49,7 @@ export const taskbarBtnClick = (winId: string | undefined) => {
     }
 };
 
-export function DesktopItemBase({
+export function DesktopItemBase<E extends React.ElementType = "button">({
     icon,
     smallIcon,
     name,
@@ -57,20 +61,22 @@ export function DesktopItemBase({
     onWinClose,
     onContextMenu,
     id,
+    As = "button" as E,
     ...p
-}: DesktopItemProps) {
+}: DesktopItemProps<E>) {
     return (
         <>
-            <button
+            <Component
+                As={As}
                 id={id ?? (win?.id ? `${win.id}-desktop-item` : undefined)}
                 className={cn(
                     "flex h-fit w-20 cursor-pointer select-none flex-col items-center rounded border border-dotted border-transparent px-2 py-1 text-center text-xs text-foreground/80 outline-none focus-within:bg-foreground/10 hover:bg-foreground/15 focus-visible:border-muted-foreground/80",
                     className,
                 )}
-                onContextMenu={(e) => {
+                onContextMenu={(e: React.MouseEvent<HTMLButtonElement>) => {
                     e.currentTarget.focus();
                     DesktopItemContextMenuEmittor.setState(e.currentTarget.id);
-                    onContextMenu && onContextMenu(e);
+                    onContextMenu?.(e);
                 }}
                 {...p}
             >
@@ -92,7 +98,7 @@ export function DesktopItemBase({
                     )}
                 </div>
                 <p className="line-clamp-2">{name}</p>
-            </button>
+            </Component>
             {win?.child && isWindowOpen && (
                 <DraggableWindowBase
                     className={win.className}
@@ -109,6 +115,26 @@ export function DesktopItemBase({
                 </DraggableWindowBase>
             )}
         </>
+    );
+}
+
+export function LinkDesktopItem({
+    href,
+    onDoubleClick,
+    onClick,
+    ...p
+}: Pick<DesktopItemProps, "name" | "icon" | "isShortcut"> &
+    React.ComponentPropsWithoutRef<"a">) {
+    return (
+        <DesktopItemBase
+            As="a"
+            {...p}
+            href={href}
+            onClick={composeEventHandlers(onClick, (e) => e.preventDefault())}
+            onDoubleClick={composeEventHandlers(onDoubleClick, (e) => {
+                window.open(href, "_blank");
+            })}
+        />
     );
 }
 

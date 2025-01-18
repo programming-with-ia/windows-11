@@ -14,25 +14,26 @@ const config = {
     typescript: {
         ignoreBuildErrors: true,
     },
+    experimental: {
+        reactCompiler: true,
+    },
     async redirects() {
         return [
             {
                 source: routes.desktop,
                 destination: routes.lock,
                 permanent: false,
-                // missing: [
-                //     {
-                //         type: "query",
-                //         key: "authorized",
-                //         value: "true",
-                //     },
-                // ],
                 missing: [
                     {
-                        type: "cookie",
+                        type: "query",
                         key: "authorized",
                         value: "true",
                     },
+                    //     {
+                    //         type: "cookie",
+                    //         key: "authorized",
+                    //         value: "true",
+                    //     },
                 ],
             },
         ];

@@ -1,8 +1,12 @@
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
-import Loader from "./loader";
+import Loader, { Bar } from "./loader";
 
-function Iframe({ className, ...p }: React.ComponentProps<"iframe">) {
+function Iframe({
+    className,
+    icon,
+    ...p
+}: React.ComponentProps<"iframe"> & { icon?: string }) {
     const [isLoading, setIsLoading] = useState(true);
     return (
         <>
@@ -13,9 +17,17 @@ function Iframe({ className, ...p }: React.ComponentProps<"iframe">) {
                 {...p}
             />
             {isLoading && (
-                <>
-                    <Loader className="absolute bottom-0 right-0 m-2" />
-                </>
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-8 bg-background">
+                    {icon && (
+                        <img
+                            src={icon}
+                            className="@6xl:size-20 size-16"
+                            alt="logo"
+                        />
+                    )}
+                    {/* <Loader className="" /> */}
+                    <Bar />
+                </div>
             )}
         </>
     );

@@ -1,6 +1,8 @@
 "use client";
 
-import DesktopItem from "@/components/desktop/desktop-item";
+import DesktopItem, {
+    LinkDesktopItem,
+} from "@/components/desktop/desktop-item";
 import TaskBar from "@/components/TaskBar";
 import React, { useEffect } from "react";
 import Explorer from "@/components/desktop/explorer";
@@ -9,7 +11,7 @@ import Iframe from "@/components/iframe";
 import CalculatorItem from "@/components/lazy-items/calculator-item";
 import ExplorerDesktopItem from "@/components/desktop/explorer-desktop-item";
 import { Component } from "@/components/component";
-import ProjectsItem from "@/components/lazy-items/projects-item";
+// import ProjectsItem from "@/components/lazy-items/projects-item";
 import Link from "next/link";
 
 import { routes } from "@/lib/routes-map";
@@ -31,11 +33,13 @@ import {
 import SegoeIcon from "@/components/segoe-ui-icon";
 import { withDefaultProps } from "@/lib/withDefaultProps";
 import { DesktopItemContextMenuEmittor } from "@/lib/emittors";
-import { doubleClick } from "@/lib/utils";
+import { doubleClick, joinPath } from "@/lib/utils";
 import Construction from "@/icons/construction";
 import FullScreenBtn from "@/components/desktop/full-screen-item";
-import useIsSignedIn from "@/hooks/useIsSignedIn";
+// import useIsSignedIn from "@/hooks/useIsSignedIn";
 import { DesktopIcons } from "@/lib/images";
+import { CommonPaths } from "@/components/desktop/explorer/emittors";
+import { siteConfig } from "@/lib/site-config";
 
 function Page() {
     //* need this
@@ -46,7 +50,7 @@ function Page() {
             <ContextMenuWrapper>
                 <div
                     id="viewport"
-                    className="relative grid flex-1 grid-flow-col overflow-visible"
+                    className="sticky top-0 mb-[3.2rem] grid flex-1 grid-flow-col overflow-visible"
                     style={{
                         gridTemplateColumns:
                             "repeat(auto-fill, minmax(5rem, 1fr))",
@@ -57,7 +61,7 @@ function Page() {
                     <ExplorerDesktopItem
                         icon={DesktopIcons.PC}
                         name="This PC"
-                        explorerTab="this-pc"
+                        explorerPath={CommonPaths.pc}
                     />
                     <Explorer />
                     <CalculatorItem />
@@ -69,6 +73,7 @@ function Page() {
                         win={{
                             child: (
                                 <Iframe
+                                    icon={DesktopIcons.Chrome}
                                     allowTransparency
                                     title="chorme"
                                     src="https://www.google.com?dark=1&ui=dark&igu=1"
@@ -89,7 +94,10 @@ function Page() {
                         className="gap-2"
                         win={{
                             child: (
-                                <Iframe src="https://github1s.com/programming-with-ia/shadcn-theme-editor/blob/master/README.md" />
+                                <Iframe
+                                    icon={DesktopIcons.Vscode}
+                                    src="https://github1s.com/programming-with-ia/shadcn-theme-editor/blob/master/README.md"
+                                />
                             ),
                             id: "vs-code",
                         }}
@@ -105,46 +113,97 @@ function Page() {
                     {/* <DesktopItem icon="/icons/game.ico" name="Game" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://g.poppigames.com/pp/purble-place/" />, id: "friv-game"}} /> */}
                     {/* <DesktopItem icon={DesktopIcons.Vscode} name="Tic Tac Toe" isShortcut smallIcon className="gap-2" win={{child: <Iframe src="https://www.onlinegames.io/games/2021/unity2/tic-tac-toe/index.html" />, id: "tic-tac-toe"}} /> */}
                     <DesktopItem
-                        icon="/icons/motoX3.jpg"
+                        icon={DesktopIcons.MotoX3M}
                         name="Moto X3M"
                         isShortcut
                         smallIcon
                         className="gap-2"
                         win={{
                             child: (
-                                <Iframe src="https://play.famobi.com/moto-x3m/A1000-10A" />
+                                <Iframe
+                                    icon={DesktopIcons.MotoX3M}
+                                    src="https://play.famobi.com/moto-x3m/A1000-10A"
+                                />
                             ),
                             id: "moto-x3m",
                         }}
                     />
                     <DesktopItem
-                        icon="/icons/speed-master.jpg"
+                        icon={DesktopIcons.SpeedMaster}
                         name="Speed Master"
                         isShortcut
                         smallIcon
                         className="gap-2"
                         win={{
                             child: (
-                                <Iframe src="https://play.famobi.com/wrapper/speed-master/A1000-10" />
+                                <Iframe
+                                    icon={DesktopIcons.SpeedMaster}
+                                    src="https://play.famobi.com/wrapper/speed-master/A1000-10"
+                                />
                             ),
                             id: "speed-master",
                         }}
                     />
+                    <DesktopItem
+                        icon={DesktopIcons.msStore}
+                        smallIcon
+                        name="Microsoft Store"
+                        className="gap-1"
+                        isShortcut
+                        win={{
+                            child: (
+                                <Iframe
+                                    icon={DesktopIcons.msStore}
+                                    src="https://apps.microsoft.com/home"
+                                />
+                            ),
+                            id: "ms-store",
+                        }}
+                    />
+                    <DesktopItem
+                        icon={DesktopIcons.Spotify}
+                        name="Spotify"
+                        className="gap-1"
+                        isShortcut
+                        win={{
+                            child: (
+                                <Iframe
+                                    style={{borderRadius: 12}}
+                                    icon={DesktopIcons.Spotify}
+                                    src="https://open.spotify.com/embed/artist/7vk5e3vY1uw9plTHJAMwjN?utm_source=generator"
+                                />
+                            ),
+                            id: "spotify",
+                        }}
+                    />
                     {/* <DesktopItem icon="/icons/projects.png" name="Projects" isShortcut className="gap-2" win={{child: <Iframe src="https://play.famobi.com/wrapper/speed-master/A1000-10" />, id: "projects"}} /> */}
-                    <ProjectsItem />
-                    <Link
-                        tabIndex={-1}
-                        aria-disabled
-                        href={routes.lock}
-                        className="pointer-events-none absolute opacity-0"
-                        aria-hidden
-                        prefetch
-                    >
-                        Lock
-                    </Link>
-                    <ExplorerDesktopItem
+                    {/* <ProjectsItem /> */}
+                    {/* <ExplorerDesktopItem
                         name="Projects"
-                        explorerTab="projects"
+                        explorerPath={joinPath(CommonPaths.desktop, "Projects")}
+                    /> */}
+                    <LinkDesktopItem
+                        icon={DesktopIcons.GithubIcon}
+                        isShortcut
+                        name="Github"
+                        id="gh-repo-desktop-item"
+                        href={siteConfig.repo}
+                    />
+                    <DesktopItem
+                        name="Notepad"
+                        className="gap-1"
+                        icon={DesktopIcons.Notepad}
+                        isShortcut
+                        smallIcon
+                        win={{
+                            id: "notepad",
+                            child: (
+                                <textarea
+                                    wrap="off"
+                                    className="fluent-scrollbar size-full resize-none scroll-p-8 bg-transparent p-2 pb-6 text-lg outline-none"
+                                />
+                            ),
+                        }}
                     />
 
                     {/* <div title="This Project Currently in Development" className="w-20 flex flex-col gap-1 select-none -col-end-1 row-start-2 animate-bounce text-xs text-foreground/80 text-center">
@@ -259,16 +318,19 @@ function ContextMenuWrapper({ children }: React.ComponentProps<"div">) {
 
 function Wrapper({ children }: React.ComponentPropsWithRef<"div">) {
     useEffect(() => {
-        const url = new URL(window.location.href);
-        url.search = "";
-        history.replaceState(null, "", url.toString());
+        // clear all search params (for authorized that set from the lockscreen)
+        if (process.env.NODE_ENV != "development") {
+            const url = new URL(window.location.href);
+            url.search = "";
+            history.replaceState(null, "", url.toString());
+        }
 
-        // todo
-        const element = document.getElementById("lazy-load-fix");
+        // todo lazy-load-fix dispay: none
+        const element = document.getElementById("screen");
         if (!element) return;
         console.log("observing...", element);
         const observer = new MutationObserver(() => {
-            element.style.display = "unset";
+            element.style.display = "flex";
         });
 
         observer.observe(element, {
@@ -279,9 +341,26 @@ function Wrapper({ children }: React.ComponentPropsWithRef<"div">) {
         return () => observer.disconnect();
     }, []);
     return (
-        <div id="lazy-load-fix" className="!contents">
-            {children}
-        </div>
+        <main
+            id="screen"
+            className="flex h-screen w-screen flex-col overflow-hidden"
+        >
+            {/* <div id="lazy-load-fix" className="!contents"> */}
+                {children}
+            {/* </div> */}
+            <div className="sr-only" aria-hidden aria-disabled data-preload>
+                <img
+                    loading="eager"
+                    src="https://i.ibb.co/Jk7gMHT/bg-dark.jpg"
+                    alt="dark-img"
+                />
+                <img
+                    loading="eager"
+                    src="https://i.ibb.co/DVd7w5f/bg-light.jpg"
+                    alt="light-img"
+                />
+            </div>
+        </main>
     );
 }
 export default Page;

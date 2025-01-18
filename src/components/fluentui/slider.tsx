@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 // import type { IntRange } from "type-fest";
+import { composeEventHandlers } from "@radix-ui/primitive";
 
 type SliderProps = {
     min?: number;
@@ -25,13 +26,6 @@ export default function Slider({
     const relValue = userValue ?? value;
     const percentage = useRef((relValue - min) / (max - min));
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange?.(e);
-        if (userValue != undefined) return;
-        const newValue = Number(e.target.value);
-        setValue(newValue);
-    };
-
     useEffect(() => {
         onValueChange?.(relValue);
         percentage.current = (relValue - min) / (max - min);
@@ -46,7 +40,15 @@ export default function Slider({
             value={userValue ?? value}
             onProgress={(e) => console.log(e.currentTarget.value)}
             style={{ "--slider-progress": `${percentage.current}%` }}
-            onChange={handleChange}
+            onChange={composeEventHandlers(
+                onChange,
+                (e) => {
+                    if (userValue != undefined) return;
+                    const newValue = Number(e.target.value);
+                    setValue(newValue);
+                },
+                { checkForDefaultPrevented: true },
+            )}
             className={cn("fluent-slider outline-none", className)}
         />
     );
