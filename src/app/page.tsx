@@ -75,8 +75,8 @@ function Page() {
                                 <Iframe
                                     icon={DesktopIcons.Chrome}
                                     allowTransparency
-                                    title="chorme"
-                                    src="https://www.google.com?dark=1&ui=dark&igu=1"
+                                    title="chrome"
+                                    src="https://v0-ship-2025.vercel.app/"
                                 />
                             ), //https://www.google.com/?igu=1
                             id: "chrome",
