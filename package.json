@@ -44,7 +44,7 @@
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.441.0",
-    "next": "15.1.0",
+    "next": "15.1.9",
     "next-themes": "^0.3.0",
     "re-resizable": "^6.9.18",
     "react": "19.0.0",
